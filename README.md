@@ -45,7 +45,8 @@ The executable will be placed in `build/`, so to run it:
 ./build/main
 ```
 
-Finally, there are some example widgets in the `widgets/` directory, so to add your own simply follow the pattern of adding the subdirectory and linking the library in `widgets/CMakeLists`.
+Finally, there are some example widgets in the `widgets/` directory, so to add your own simply follow the pattern of adding the subdirectory and linking the library in `widgets/CMakeLists.txt`.
+You then call them at the end of `init_lvgl()`, or after that function returns.
 
 ## Supported LVGL versions
 
