@@ -43,6 +43,28 @@ static void sdl_display_flush(lv_display_t *disp, const lv_area_t *area,
     lv_display_flush_ready(disp);
 }
 
+static void sdl_mouse_read(lv_indev_t *indev, lv_indev_data_t *data) {
+#if USE_SDL2
+    int mouse_x, mouse_y;
+#else
+    float mouse_x, mouse_y;
+#endif
+
+    uint32_t mouse_state = SDL_GetMouseState(&mouse_x, &mouse_y);
+
+    data->point.x = mouse_x;
+    data->point.y = mouse_y;
+
+#if USE_SDL2
+    data->state = (mouse_state & SDL_BUTTON(SDL_BUTTON_LEFT))
+                      ? LV_INDEV_STATE_PRESSED
+                      : LV_INDEV_STATE_RELEASED;
+#else
+    data->state = (mouse_state & SDL_BUTTON_LMASK) ? LV_INDEV_STATE_PRESSED
+                                                   : LV_INDEV_STATE_RELEASED;
+#endif
+}
+
 void init_sdl(void) {
     SDL_Init(SDL_INIT_VIDEO);
 
@@ -86,26 +108,11 @@ void run_sdl_loop(void) {
     }
 }
 
-static void sdl_mouse_read(lv_indev_t *indev, lv_indev_data_t *data) {
-#if USE_SDL2
-    int mouse_x, mouse_y;
-#else
-    float mouse_x, mouse_y;
-#endif
-
-    uint32_t mouse_state = SDL_GetMouseState(&mouse_x, &mouse_y);
-
-    data->point.x = mouse_x;
-    data->point.y = mouse_y;
-
-#if USE_SDL2
-    data->state = (mouse_state & SDL_BUTTON(SDL_BUTTON_LEFT))
-                      ? LV_INDEV_STATE_PRESSED
-                      : LV_INDEV_STATE_RELEASED;
-#else
-    data->state = (mouse_state & SDL_BUTTON_LMASK) ? LV_INDEV_STATE_PRESSED
-                                                   : LV_INDEV_STATE_RELEASED;
-#endif
+void destroy_sdl(void) {
+    SDL_DestroyTexture(texture);
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+    SDL_Quit();
 }
 
 void init_lvgl(void) {
@@ -123,15 +130,9 @@ void init_lvgl(void) {
     lv_indev_set_type(indev, LV_INDEV_TYPE_POINTER);
     lv_indev_set_read_cb(indev, sdl_mouse_read);
 
-    temp_widget_init(disp);
-    // cubic_bezier_widget_init(disp);
-}
-
-void destroy_sdl(void) {
-    SDL_DestroyTexture(texture);
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
-    SDL_Quit();
+    // ********** YOUR WIDGETS HERE ********** //
+    // temp_widget_init(disp);
+    cubic_bezier_widget_init(disp);
 }
 
 int main(int argc, char *argv[]) {
