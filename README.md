@@ -19,21 +19,30 @@ git clone --recurse-submodules https://github.com/jbrilha/LVGL_SDL_SIM.git
 Then use CMake as you would normally:
 
 ```bash
-	@mkdir -p build
-	cd build && cmake .. && make
+mkdir -p build
+cd build && cmake .. && make
 ```
 
 The default option is to use SDL3, but if you want to use SDL2:
 
 ```bash
-	@mkdir -p build
-    cd build && cmake -DUSE_SDL2=ON .. && make
+mkdir -p build
+cd build && cmake -DUSE_SDL2=ON .. && make
 ```
+
+Or just use the Makefile:
+
+```bash
+make SDL3 run
+# or
+make SDL2 run
+```
+
 
 The executable will be placed in `build/`, so to run it:
 
 ```bash
-	./build/main
+./build/main
 ```
 
 Finally, there are some example widgets in the `widgets/` directory, so to add your own simply follow the pattern of adding the subdirectory and linking the library in `widgets/CMakeLists`.
