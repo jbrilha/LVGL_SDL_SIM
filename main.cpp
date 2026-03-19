@@ -1,4 +1,5 @@
 #include "lvgl/lvgl.h"
+#include "round_scale_widget.h"
 #include <stdlib.h>
 #include <unistd.h>
 
@@ -13,8 +14,8 @@
 #include "cubic_bezier_widget.h"
 #include "temp_widget.h"
 
-#define WIDTH 320
-#define HEIGHT 240
+#define WIDTH 240
+#define HEIGHT 320
 
 static SDL_Window *window;
 static SDL_Renderer *renderer;
@@ -95,6 +96,16 @@ void run_sdl_loop(void) {
             if (event.type == QUIT_EVENT) {
                 running = false;
             }
+            if (event.type == SDL_EVENT_KEY_DOWN) {
+#if USE_SDL2
+                if (event.key.keysym.sym == SDLK_q)
+#else
+                if (event.key.key == SDLK_Q)
+#endif
+                {
+                    running = false;
+                }
+            }
         }
 
         current_tick = SDL_GetTicks();
@@ -133,6 +144,7 @@ void init_lvgl(void) {
     // ********** YOUR WIDGETS HERE ********** //
     // temp_widget_init(disp);
     cubic_bezier_widget_init(disp);
+    // round_scale_widget_init(disp);
 }
 
 int main(int argc, char *argv[]) {
