@@ -6,9 +6,11 @@
 #if USE_SDL2
 #include <SDL2/SDL.h>
 #define QUIT_EVENT SDL_QUIT
+#define KEYDOWN_EVENT SDL_KEYDOWN
 #else
 #include <SDL3/SDL.h>
 #define QUIT_EVENT SDL_EVENT_QUIT
+#define KEYDOWN_EVENT SDL_EVENT_KEY_DOWN
 #endif
 
 #include "cubic_bezier_widget.h"
@@ -96,7 +98,7 @@ void run_sdl_loop(void) {
             if (event.type == QUIT_EVENT) {
                 running = false;
             }
-            if (event.type == SDL_EVENT_KEY_DOWN) {
+            if (event.type == KEYDOWN_EVENT) {
 #if USE_SDL2
                 if (event.key.keysym.sym == SDLK_q)
 #else
